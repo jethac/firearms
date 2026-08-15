@@ -1,0 +1,1 @@
+window.FIREARM_IMGS = {};

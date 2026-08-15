@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firearms Tech Tree — the development lineage of the world's firearms</title>
+  <meta name="description" content="An interactive development tree of the world's firearms from the metallic-cartridge revolution to the modular era: lineage arrows, variant chains, license builds and copies, designers, and operator designations." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: chart -->
+    <section class="preview">
+      <header class="preview-top">
+        <div class="brand-line">
+          <span class="dot"></span>
+          <span class="title">firearms-tech-tree</span>
+          <span class="badge">SVG</span>
+        </div>
+        <div class="transport">
+          <button id="btnLegends" type="button" class="active">Variants: on</button>
+          <button id="btnZoomIn" type="button" title="Zoom in">+</button>
+          <button id="btnZoomOut" type="button" title="Zoom out">−</button>
+          <button id="btnFit" type="button" title="Fit chart to view">Fit</button>
+          <button id="btnInfo" type="button" class="btn-info">Info</button>
+          <span class="count" id="shipCount">— firearms</span>
+        </div>
+      </header>
+
+      <div class="stage" id="stage">
+        <div class="chart-legend" aria-hidden="true">
+          <div><span class="swatch" style="background:var(--c-us)"></span>United States</div>
+          <div><span class="swatch" style="background:var(--c-su)"></span>USSR / Russia</div>
+          <div><span class="swatch" style="background:var(--c-eu)"></span>Europe</div>
+          <div><span class="swatch" style="background:var(--c-rw)"></span>Elsewhere</div>
+          <div><svg class="edge-sample" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#8fb8dc" stroke-width="2"/></svg>direct development</div>
+          <div><svg class="edge-sample" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#8fb8dc" stroke-width="2" stroke-dasharray="5 4"/></svg>influence / loose link</div>
+          <div><svg class="edge-sample" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#8fb8dc" stroke-width="2" stroke-dasharray="8 3 2 3"/></svg>license build / copy</div>
+          <div><span class="edge-sample" style="color:#7fa0c0;font-weight:700;text-align:center">?</span>disputed link</div>
+        </div>
+        <div class="tooltip" id="tooltip"></div>
+        <div class="detail" id="detail">
+          <button class="d-close" id="detailClose" type="button" aria-label="Close">×</button>
+          <div id="detailBody"></div>
+        </div>
+      </div>
+
+      <footer class="hud">
+        <p class="hud-credit">
+          Sourced from
+          <a href="https://en.wikipedia.org/" target="_blank" rel="noopener noreferrer">Wikipedia</a>
+          &amp;
+          <a href="https://grokipedia.com/" target="_blank" rel="noopener noreferrer">Grokipedia</a>
+          · reference:
+          <a href="https://modernfirearms.net/" target="_blank" rel="noopener noreferrer">Modern Firearms</a>
+          · a sibling of
+          <a href="https://fighters.jethachan.net/" target="_blank" rel="noopener noreferrer">fighters</a>
+          &amp;
+          <a href="https://tietechtree.jethachan.net/" target="_blank" rel="noopener noreferrer">tietechtree</a>
+          · by
+          <a href="https://x.com/jetha" target="_blank" rel="noopener noreferrer">Jetha Chan</a>
+        </p>
+        <span class="hud-meta">
+          <a href="https://github.com/jethac/firearms" target="_blank" rel="noopener noreferrer" style="color:#04121f">GitHub</a>
+        </span>
+      </footer>
+    </section>
+
+    <!-- RIGHT: sidebar -->
+    <aside class="sidebar">
+      <nav class="tabs" role="tablist">
+        <button class="tab tab-detail" data-tab="detail" id="tabDetail" type="button" role="tab" aria-selected="false" hidden>In Detail</button>
+        <button class="tab active" data-tab="about" type="button" role="tab" aria-selected="true">About</button>
+        <button class="tab-close" id="sidebarClose" type="button" aria-label="Close sidebar">✕</button>
+      </nav>
+
+      <div class="tab-panels">
+        <!-- IN DETAIL (ephemeral — appears when a firearm or arrow is selected) -->
+        <div id="panel-detail" class="panel" role="tabpanel">
+          <div class="panel-scroll">
+            <button class="d-close-panel" id="detailPanelClose" type="button" aria-label="Close">✕ close</button>
+            <div id="detailPanelBody"></div>
+          </div>
+        </div>
+
+        <!-- ABOUT -->
+        <div id="panel-about" class="panel active" role="tabpanel">
+          <div class="panel-scroll">
+            <h1>Firearms Tech Tree</h1>
+            <p class="lede">
+              The development lineage of the world's <strong>firearms</strong>, from
+              the metallic-cartridge revolution of the 1860s to the modular rifles of
+              the 2020s — who designed what from what, who built it under license,
+              who copied it without one, and what everyone else called it.
+            </p>
+
+            <section class="block credit">
+              <h2>What this is</h2>
+              <p>
+                Every firearm links to its <strong>Wikipedia</strong> and
+                <strong>Grokipedia</strong> article. Solid arrows are direct
+                development; dashed arrows are influence; dash-dot arrows are
+                <strong>license production or copies</strong> — including unlicensed
+                ones, of which firearms history has more than any other field:
+                the Springfield that paid Mauser royalties mid-lawsuit, the
+                Chinese Type 56 universe, the M16 clones nobody asked Colt about.
+              </p>
+              <p>
+                Where a family matters, its variants are their own chain — the
+                AK's 47→AKM→74→12 line, the AR's path from AR-10 to M4 and
+                beyond — and the <kbd>Variants</kbd> button collapses those
+                chains back to family heads.
+              </p>
+            </section>
+
+            <section class="block">
+              <h2>How to read it</h2>
+              <p>
+                Node color is bloc: <span class="status-chip us">United States</span>,
+                <span class="status-chip su">USSR / Russia</span>,
+                <span class="status-chip eu">Europe</span>,
+                <span class="status-chip rw">elsewhere</span> — and each
+                <strong>horizontal lane</strong> is one designer, factory, or nation,
+                so Mauser, Browning, Kalashnikov, and the houses that copied them each
+                hold their own line.
+                The chart is a <strong>timeline</strong>: horizontal position is the
+                design's <strong>introduction</strong>, from the 1860s to the 2020s,
+                with <strong>1886</strong> — the Lebel and smokeless powder — marked as
+                a dotted line where every earlier firearm became obsolete overnight.
+              </p>
+              <p>
+                <strong>Scroll</strong> to zoom, <strong>drag</strong> to pan
+                (on touch screens, <strong>pinch</strong> to zoom),
+                <strong>hover</strong> a firearm for a quick look,
+                <strong>click</strong> it — its summary, designer, operator
+                designations, and article links open in an <strong>In&nbsp;Detail</strong>
+                tab in this sidebar. <strong>Arrows are clickable too</strong>: each one
+                explains what changed between the two designs it connects. Press
+                <kbd>Esc</kbd> or close the tab to come back here.
+              </p>
+            </section>
+
+            <section class="block">
+              <h2>Sources &amp; honesty</h2>
+              <p>
+                Max Popenker's
+                <a href="https://modernfirearms.net/" target="_blank" rel="noopener noreferrer">Modern Firearms</a>
+                (the encyclopedia long known by its old address, world.guns.ru) is the
+                standard reference for this material and the inspiration for this
+                chart's coverage; its text is its own, so article links go to
+                <a href="https://en.wikipedia.org/" target="_blank" rel="noopener noreferrer">Wikipedia</a>
+                and <a href="https://grokipedia.com/" target="_blank" rel="noopener noreferrer">Grokipedia</a>,
+                and the write-ups here were written fresh and fact-checked against
+                Wikipedia. We used an LLM (Claude) to write the firearm summaries and
+                the description text on every arrow. Lineage is genuinely contested in
+                places — the StG 44's influence on the AK-47 is the most argued arrow
+                in the field — and disputed or informal links carry a
+                <strong>?</strong> and say so. Photographs are loaded from Wikimedia
+                Commons with per-image credit in the detail panel. Corrections welcome
+                via
+                <a href="https://github.com/jethac/firearms/issues" target="_blank" rel="noopener noreferrer">GitHub issues</a>.
+              </p>
+            </section>
+
+            <section class="block">
+              <h2>Scope</h2>
+              <p>
+                Cartridge firearms from roughly 1860 onward: military pistols,
+                submachine guns, rifles, machine guns, precision rifles, and combat
+                shotguns, plus the landmark civilian designs their lineages run
+                through. Muzzle-loaders, air guns, and grenade launchers are out of
+                scope. This is an identification and history chart — names, dates,
+                lineage, and stories — not a technical manual.
+                Dates are the design's <strong>introduction or adoption</strong>,
+                which sometimes differ from first prototype by years.
+              </p>
+            </section>
+
+            <section class="block">
+              <h2>License</h2>
+              <p>
+                Site code is <a href="https://github.com/jethac/firearms/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a> ·
+                source on <a href="https://github.com/jethac/firearms" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                Text content draws on Wikipedia (CC&nbsp;BY-SA) for facts; photographs
+                remain under their stated licenses with credit per image.
+              </p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./images.js"></script>
+  <script src="./lore.js"></script>
+  <script src="./main.js"></script>
+</body>
+</html>
