@@ -20,11 +20,11 @@
   // ---------- timeline scale ----------
   // piecewise-linear x scale over first-flight calendar years
   const T_STOPS = [
-    [1860, 0], [1886, 420], [1900, 830], [1914, 1230], [1918, 1430],
-    [1935, 1920], [1945, 2380], [1955, 2840], [1965, 3290], [1975, 3690],
-    [1985, 4040], [1995, 4340], [2010, 4740], [2026, 5050]
+    [1840, 0], [1860, 150], [1886, 570], [1900, 980], [1914, 1380],
+    [1918, 1580], [1935, 2070], [1945, 2530], [1955, 2990], [1965, 3440],
+    [1975, 3840], [1985, 4190], [1995, 4490], [2010, 4990], [2026, 5510]
   ];
-  const MX = 140, Y0 = 260, ROW_H = 190;
+  const MX = 140, Y0 = 260, ROW_H = 150;
   function xOf(t) {
     const s = T_STOPS;
     if (t <= s[0][0]) return MX + s[0][1];
@@ -37,7 +37,7 @@
     return MX + s[s.length - 1][1];
   }
   const ERAS = [
-    { label: "Cartridge revolution", t0: 1860, t1: 1886 },
+    { label: "Cartridge revolution", t0: 1840, t1: 1886 },
     { label: "Smokeless era", t0: 1886, t1: 1914 },
     { label: "World War I", t0: 1914, t1: 1918 },
     { label: "Interwar", t0: 1918, t1: 1939 },
@@ -53,7 +53,7 @@
 
   // image sizing + node placement
   const SPR = window.FIREARM_IMGS || {};
-  const IMG_MAX = 130;
+  const IMG_MAX = 100;
   for (const n of DATA.nodes) {
     if (typeof n.t === "number") {
       n.x = Math.round(xOf(n.t));
@@ -173,7 +173,7 @@
     if (!byRow.has(r)) byRow.set(r, []);
     byRow.get(r).push(n);
   }
-  const hwOf = n => n.sub ? 60 : Math.max((n.dw || 90) / 2, 64) + 10;
+  const hwOf = n => n.sub ? 60 : Math.max((n.dw || 90) / 2, 58) + 8;
   const blockerAt = (row, x, skip) =>
     (byRow.get(row) || []).find(o => !skip.includes(o) && Math.abs(x - o.x) < hwOf(o));
   const laneClear = (row, x1, x2, skip) => {
@@ -184,7 +184,7 @@
   // channel track allocator: gap g sits between lane g and lane g+1
   const chans = new Map();
   const TRACK_ORDER = [2, 3, 1, 4, 0, 5];
-  const chanY = (g, k) => Y0 + g * ROW_H + 86 + k * 11;
+  const chanY = (g, k) => Y0 + g * ROW_H + 68 + k * 9;
   function alloc(g, x1, x2) {
     if (x2 < x1) { const t = x1; x1 = x2; x2 = t; }
     if (!chans.has(g)) chans.set(g, [[], [], [], [], [], []]);
